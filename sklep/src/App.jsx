@@ -17,8 +17,19 @@ export default function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Login />} />
-      <Route path="/bucket" element={<Bucket />} />
+      <Route path="/bucket" element={
+        <ProtectedRoute>
+          <Bucket />
+        </ProtectedRoute>
+      } />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
     </div>
   );
