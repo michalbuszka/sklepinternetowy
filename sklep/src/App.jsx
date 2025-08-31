@@ -2,10 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './Screens/Dashboard';
 import Login  from './Screens/Login';
 import ProtectedRoute from './ProtectedRoute';
-
-function About() {
-  return <h1>About Page</h1>;
-}
+import Bucket from "./Screens/Bucket";
 
 export default function App() {
   return (
@@ -21,6 +18,7 @@ export default function App() {
         }
       />
       <Route path="*" element={<Login />} />
+      <Route path="/bucket" element={<Bucket />} />
     </Routes>
     </div>
   );
