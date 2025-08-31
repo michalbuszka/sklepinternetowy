@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 export default function Bucket() {
   const [cart, setCart] = useState([]);
+  const [message, setMessage] = useState(""); 
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -9,9 +10,12 @@ export default function Bucket() {
   }, []);
 
   const removeFromCart = (index) => {
+    const removedItem = cart[index];
     const newCart = cart.filter((_, i) => i !== index);
     setCart(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
+    setMessage(`Usunięto "${removedItem.title}" z koszyka`);
+    setTimeout(() => setMessage(""), 3000); 
   };
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
@@ -27,7 +31,11 @@ export default function Bucket() {
           ← Powrót do sklepu
         </a>
       </div>
-
+      {message && (
+        <div className="mb-4 max-w-3xl mx-auto p-3 bg-yellow-100 text-yellow-800 rounded-lg shadow">
+          {message}
+        </div>
+      )}
       {cart.length === 0 ? (
         <p className="text-center text-gray-500 text-lg">Koszyk jest pusty</p>
       ) : (

@@ -22,7 +22,7 @@ export default defineConfig({
       },
       workbox: {
         runtimeCaching: [
-          // Cache API produktów
+          //Cache API produktów
           {
             urlPattern: /^https:\/\/dummyjson\.com\/products.*$/,
             handler: "NetworkFirst",
@@ -31,7 +31,7 @@ export default defineConfig({
               expiration: { maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 },
             },
           },
-          // Cache miniaturki obrazków
+          //Cache miniaturki obrazków
           {
             urlPattern: /^https:\/\/i\.dummyjson\.com\/.*$/,
             handler: "CacheFirst",

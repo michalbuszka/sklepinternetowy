@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../Components/ProductCard";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function Dashboard() {
   const [user, setUser] = useState(() => {
@@ -42,6 +43,7 @@ export default function Dashboard() {
     const newCart = [...cart, product];
     setCart(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
+     toast.success(`${product.title} został dodany do koszyka!`);
   };
 
   const filteredProducts = products.filter((p) =>
@@ -80,6 +82,7 @@ export default function Dashboard() {
           ))}
         </div>
       </div>
+       <Toaster position="top-left" reverseOrder={false} />
     </div>
   );
 }
