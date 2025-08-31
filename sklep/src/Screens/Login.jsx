@@ -24,7 +24,8 @@ export default function Login() {
       if (!res.ok) throw new Error("Invalid credentials");
 
       const data = await res.json();
-      localStorage.setItem("authToken", data.token);
+      console.log(data);
+      localStorage.setItem("authToken", data.accessToken);
       navigate("/dashboard");
     } catch (err) {
       setError("Błędne dane logowania");

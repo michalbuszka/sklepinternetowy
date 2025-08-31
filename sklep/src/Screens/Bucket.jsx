@@ -17,10 +17,9 @@ export default function Bucket() {
   const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div className="p-6 text-gray-900 bg-gray-100 min-h-screen">
-      {/* Nagłówek koszyka */}
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold mb-2">Twój koszyk</h2>
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold mb-2 text-gray-800">Twój koszyk</h2>
         <a
           href="/"
           className="inline-block text-green-600 font-semibold hover:underline"
@@ -30,32 +29,36 @@ export default function Bucket() {
       </div>
 
       {cart.length === 0 ? (
-        <p className="text-center">Koszyk jest pusty</p>
+        <p className="text-center text-gray-500 text-lg">Koszyk jest pusty</p>
       ) : (
-        <>
-          <ul className="space-y-2">
-            {cart.map((item, index) => (
-              <li
-                key={index}
-                className="bg-white p-3 rounded shadow flex justify-between"
+        <div className="space-y-4 max-w-3xl mx-auto">
+          {cart.map((item, index) => (
+            <div
+              key={index}
+              className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between gap-4"
+            >
+              <div className="flex flex-col">
+                <span className="text-lg font-medium text-gray-800">
+                  {item.title}
+                </span>
+                <span className="text-gray-500">${item.price.toFixed(2)}</span>
+              </div>
+
+              <button
+                onClick={() => removeFromCart(index)}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition"
               >
-                <span>{item.title}</span>
-                <div className="flex gap-3 items-center">
-                  <span className="font-bold">${item.price}</span>
-                  <button
-                    onClick={() => removeFromCart(index)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Usuń
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-4 text-right font-bold">
-            Razem: ${totalPrice.toFixed(2)}
+                Usuń
+              </button>
+            </div>
+          ))}
+          <div className="flex justify-between items-center mt-6 p-4 bg-white rounded-xl shadow-md">
+            <span className="text-xl font-bold text-gray-800">Razem:</span>
+            <span className="text-xl font-bold text-green-600">
+              ${totalPrice.toFixed(2)}
+            </span>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

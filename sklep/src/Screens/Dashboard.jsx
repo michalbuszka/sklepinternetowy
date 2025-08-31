@@ -1,29 +1,36 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../Components/ProductCard";
 
 export default function Dashboard() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
-  // Pobieranie użytkownika po tokenie
   useEffect(() => {
+    if (user) return; 
     const token = localStorage.getItem("authToken");
     if (!token) return;
 
     fetch("https://dummyjson.com/auth/users/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => res.json())
-      .then(setUser)
+      .then((res) => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+      })
+      .then((data) => {
+        setUser(data);
+        localStorage.setItem("user", JSON.stringify(data));
+      })
       .catch(console.error);
-  }, []);
-
-  // Pobieranie produktów
+  }, [user]);
   useEffect(() => {
     fetch("https://dummyjson.com/products?limit=20")
       .then((res) => res.json())
@@ -31,11 +38,11 @@ export default function Dashboard() {
       .catch(console.error);
   }, []);
 
-const addToCart = (product) => {
-  const newCart = [...cart, product];
-  setCart(newCart);
-  localStorage.setItem("cart", JSON.stringify(newCart));
-};
+  const addToCart = (product) => {
+    const newCart = [...cart, product];
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+  };
 
   const filteredProducts = products.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
@@ -45,7 +52,6 @@ const addToCart = (product) => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Navbar */}
       <nav className="bg-green-600 p-4 text-white flex justify-between items-center">
         <h1 className="text-xl font-bold">Witaj {user.firstName}!</h1>
         <a
@@ -55,8 +61,6 @@ const addToCart = (product) => {
           Koszyk ({cart.length})
         </a>
       </nav>
-
-      {/* Widok produktów */}
       <div className="p-6">
         <input
           type="text"
